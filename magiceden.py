@@ -20,34 +20,27 @@ def mint(values, isWindows):
     def selectWallet():
         print("Status - Selecting wallet on ME")
         WebDriverWait(driver, 60).until(EC.presence_of_element_located(
-            (By.XPATH, "//button[contains(text(), 'Select Wallet')]")))
+            (By.XPATH, "//button[contains(text(), 'Connect Wallet')]")))
         select_wallet = driver.find_element(
-            By.XPATH, "//button[contains(text(), 'Select Wallet')]")
+            By.XPATH, "//button[contains(text(), 'Connect Wallet')]")
         select_wallet.click()
 
-        WebDriverWait(driver, 60).until(EC.presence_of_element_located(
-            (By.XPATH, "//button[contains(text(),'Phantom')]")))
+        WebDriverWait(driver, 600).until(EC.element_to_be_clickable(
+            (By.XPATH, "//span[contains(text(),'Phantom')]")))
         phantom = driver.find_element(
-            By.XPATH, "//button[contains(text(),'Phantom')]")
+            By.XPATH, "//span[contains(text(),'Phantom')]")
         phantom.click()
 
-        original_window = driver.current_window_handle
         WebDriverWait(driver, 60).until(EC.number_of_windows_to_be(2))
-        for window_handle in driver.window_handles:
-            if window_handle != original_window:
-                driver.switch_to.window(window_handle)
-                break
+        driver.switch_to.window(driver.window_handles[1])
 
-        driver.maximize_window()
         WebDriverWait(driver, 60).until(EC.presence_of_element_located(
             (By.XPATH, "//button[contains(text(),'Connect')]")))
-        connect = driver.find_element(
+        popup_connect = driver.find_element(
             By.XPATH, "//button[contains(text(),'Connect')]")
-        connect.click()
-        
-        driver.switch_to.window(main_window)
-
-        time.sleep(5)
+        popup_connect.click()
+        driver.switch_to.window(driver.window_handles[0])
+        time.sleep(3)
         WebDriverWait(driver, 60).until(EC.presence_of_element_located(
             (By.XPATH, "//button[contains(text(),'I understand')]")))
         agree = driver.find_element(
