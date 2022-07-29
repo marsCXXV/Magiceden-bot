@@ -17,10 +17,10 @@ def mint(values, isWindows):
     
     def selectWallet():
         print("Status - Selecting wallet on ME")
-        WebDriverWait(driver, 60).until(EC.presence_of_element_located(
-            (By.XPATH, "//button[contains(text(), 'Connect')]")))
+        WebDriverWait(driver, 60).until(EC.element_to_be_clickable(
+            (By.XPATH, "/html[1]/body[1]/div[2]/div[2]/header[1]/nav[1]/div[2]/div[2]/div[1]/button[2]")))
         select_wallet = driver.find_element(
-            By.XPATH, "//button[contains(text(), 'Connect')]")
+            By.XPATH, "/html[1]/body[1]/div[2]/div[2]/header[1]/nav[1]/div[2]/div[2]/div[1]/button[2]")
         select_wallet.click()
 
         WebDriverWait(driver, 60).until(EC.element_to_be_clickable(
@@ -120,14 +120,10 @@ def mint(values, isWindows):
     options.add_extension("Phantom.crx")
     options.add_argument("--disable-gpu")
 
-    # to keep window open after mint uncomment option below, side effect, will open alot of chrome windows
-    #options.add_experimental_option("detach", True)
-
     prefs = {"profile.managed_default_content_settings.images": 2}
     options.add_experimental_option("prefs", prefs)
     options.add_experimental_option("excludeSwitches", ["enable-logging"])
 
-    #options for chrome install
     os.environ['WDM8LOCAL'] = '1'
 
 
@@ -137,16 +133,12 @@ def mint(values, isWindows):
 
 
 
-    # opens the launchpad page
     driver.get(values[0])
 
-    # Actions - Initialize wallet
     main_window = initWallet()
 
-    # Actions - select wallet on magic eden
     selectWallet()
 
-    # Actions - MINTS WHEN TIMER IS UP
     avaitMint()
 
     print("Minting Finished")
